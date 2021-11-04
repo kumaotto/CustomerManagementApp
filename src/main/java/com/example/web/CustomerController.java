@@ -8,6 +8,7 @@ import com.example.domain.Customer;
 import com.example.service.CustomerService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -56,4 +57,27 @@ public class CustomerController {
     return "redirect:/customers";
   }
 
+  @GetMapping(path = "edit", params = "form")
+  String editForm(@RequestParam Integer id, CustomerForm form) {
+    Customer customer = customerService.findOne(id);
+    BeanUtils.copyProperties(customer, form);
+    return "customers/edit";
+  }
+
+  @PostMapping(path = "edit")
+  String edit(@RequestParam Integer id, @Validated CustomerForm form, BindingResult result) {
+    if (result.hasErrors()) {
+      return editForm(id, form);
+    }
+    Customer customer = new Customer();
+    BeanUtils.copyProperties(form, customer);
+    customer.setId(id);
+    customerService.update(customer);
+    return "redirect:/customers";
+  }
+
+  @GetMapping(path = "edit", params = "goToTop")
+  String goToTop() {
+    return "redirect:/customers";
+  }
 }
