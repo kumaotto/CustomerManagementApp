@@ -8,15 +8,16 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DemoApplication implements CommandLineRunner {
+public class DemoApplication {
 	@Autowired
 	CustomerRepository customerRepository;
 
-	@Override
-	public void run(String... args) throws Exception {
-		Customer created = customerRepository.save(new Customer(null, "Hidetoshi", "Dekisugi"));
-		System.out.println(created + " is created!");
-	}
+	// @Override
+	// public void run(String... args) throws Exception {
+	// Customer created = customerRepository.save(new Customer(null, "Hidetoshi",
+	// "Dekisugi"));
+	// System.out.println(created + " is created!");
+	// }
 
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
