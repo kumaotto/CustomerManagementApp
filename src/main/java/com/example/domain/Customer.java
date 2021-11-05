@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "customers")
@@ -20,4 +17,8 @@ public class Customer {
   private Integer id;
   private String firstName;
   private String lastName;
+  @ManyToOne(fetch = FetchType.LAZY)
+  // 外部キーのカラム名を指定
+  @JoinColumn(nullable = true, name = "username")
+  private User user;
 }
