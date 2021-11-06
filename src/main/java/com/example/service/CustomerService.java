@@ -1,8 +1,9 @@
 package com.example.service;
 
-import com.example.domain.User;
 import com.example.domain.Customer;
+import com.example.domain.User;
 import com.example.repository.CustomerRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,14 +18,16 @@ public class CustomerService {
   @Autowired
   CustomerRepository customerRepository;
 
-  // 本来はID存在チェック処理を入れるべき
-
   public List<Customer> findAll() {
     return customerRepository.findAllOrderByName();
   }
 
+  public Page<Customer> findAll(Pageable pageable) {
+    return customerRepository.findAllOrderByName(pageable);
+  }
+
   public Customer findOne(Integer id) {
-    return customerRepository.findById(id).get();
+    return customerRepository.getById(id);
   }
 
   public Customer create(Customer customer, User user) {
@@ -40,9 +43,4 @@ public class CustomerService {
   public void delete(Integer id) {
     customerRepository.deleteById(id);
   }
-
-  public Page<Customer> findAll(Pageable pageable) {
-    return customerRepository.findAllOrderByName(pageable);
-  }
-
 }

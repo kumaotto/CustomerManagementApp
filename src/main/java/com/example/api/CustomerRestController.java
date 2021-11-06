@@ -2,10 +2,13 @@ package com.example.api;
 
 import com.example.domain.Customer;
 import com.example.service.CustomerService;
+import com.example.service.LoginUserDetails;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,16 +56,18 @@ public class CustomerRestController {
   }
 
   @PostMapping
-  ResponseEntity<Customer> postCustomers(@RequestBody Customer customer, UriComponentsBuilder uriBuilder) {
-    Customer created = customerService.create(customer);
+  ResponseEntity<Customer> postCustomers(@RequestBody Customer customer, UriComponentsBuilder uriBuilder,
+      @AuthenticationPrincipal LoginUserDetails userDetails) {
+    Customer created = customerService.create(customer, userDetails.getUser());
     URI location = uriBuilder.path("api/customers/{id}").buildAndExpand(created.getId()).toUri();
     return ResponseEntity.created(location).body(created);
   }
 
   @PutMapping(path = "{id}")
-  Customer putCustomer(@PathVariable Integer id, @RequestBody Customer customer) {
+  Customer putCustomer(@PathVariable Integer id, @RequestBody Customer customer,
+      @AuthenticationPrincipal LoginUserDetails userDetails) {
     customer.setId(id);
-    return customerService.update(customer);
+    return customerService.update(customer, userDetails.getUser());
   }
 
   @DeleteMapping(path = "{id}")

@@ -15,10 +15,11 @@ public class LoginUserDetailsService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    User user = userRepository.findOne(username);
-    if (user == null) {
-      throw new UsernameNotFoundException("The requested user is not found.");
-    }
-    return new LoginUserDetails(user);
+    return userRepository.findById(username).map(LoginUserDetails::new)
+        .orElseThrow(() -> new UsernameNotFoundException("The requested user is not found."));
+    // if (user == null) {
+    // throw new UsernameNotFoundException("The requested user is not found.");
+    // }
+    // return new LoginUserDetails(user);
   }
 }

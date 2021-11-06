@@ -1,7 +1,3 @@
-/**
- * 画面遷移用 コントローラー
- */
-
 package com.example.web;
 
 import com.example.domain.Customer;
@@ -10,9 +6,7 @@ import com.example.service.LoginUserDetails;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -50,16 +44,15 @@ public class CustomerController {
     return "customers/list";
   }
 
-  // ログイン中のLoginUserDetailオブジェクトを取得
   @PostMapping(path = "create")
-  String create(@Validated CustomerForm form, BindingResult result, Model model,
-      @AuthenticationPrincipal LoginUserDetails userdetails) {
+  public String create(@Validated CustomerForm form, BindingResult result, Model model,
+      @AuthenticationPrincipal LoginUserDetails userDetails) {
     if (result.hasErrors()) {
       return list(model);
     }
     Customer customer = new Customer();
     BeanUtils.copyProperties(form, customer);
-    customerService.create(customer, userdetails.getUser());
+    customerService.create(customer, userDetails.getUser());
     return "redirect:/customers";
   }
 
@@ -71,7 +64,7 @@ public class CustomerController {
   }
 
   @PostMapping(path = "edit")
-  String edit(@RequestParam Integer id, @Validated CustomerForm form, BindingResult result,
+  public String edit(@RequestParam Integer id, @Validated CustomerForm form, BindingResult result,
       @AuthenticationPrincipal LoginUserDetails userDetails) {
     if (result.hasErrors()) {
       return editForm(id, form);
