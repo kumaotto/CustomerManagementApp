@@ -1,33 +1,43 @@
 package com.example.domain;
 
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import java.util.List;
+
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-
-import javax.persistence.*;
-import java.util.List;
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "users")
-//
-@ToString(exclude = "customers")
 public class User {
   @Id
-  private String userName;
-  // Rest APIでUserクラスをJSON出力する場合に、ID/Passは除外する
+  private String username;
   @JsonIgnore
   private String encodedPassword;
   @JsonIgnore
-  // 関連するEntityを遅延ロードさせる
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
   private List<Customer> customers;
+
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public String getEncodedPassword() {
+    return encodedPassword;
+  }
+
+  public void setEncodedPassword(String encodedPassword) {
+    this.encodedPassword = encodedPassword;
+  }
+
+  public List<Customer> getCustomers() {
+    return customers;
+  }
+
+  public void setCustomers(List<Customer> customers) {
+    this.customers = customers;
+  }
 }

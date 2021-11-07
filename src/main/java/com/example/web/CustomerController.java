@@ -21,22 +21,11 @@ public class CustomerController {
   @Autowired
   CustomerService customerService;
 
-  /**
-   * run before list,create
-   *
-   * @return CustomerForm
-   */
   @ModelAttribute
   CustomerForm setUpForm() {
     return new CustomerForm();
   }
 
-  /**
-   * Create list.html path :pass the value to window By Model
-   *
-   * @param model
-   * @return
-   */
   @GetMapping
   String list(Model model) {
     List<Customer> customers = customerService.findAll();
@@ -86,4 +75,5 @@ public class CustomerController {
     customerService.delete(id);
     return "redirect:/customers";
   }
+
 }
